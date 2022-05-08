@@ -21,23 +21,26 @@ M=0             // RAM[1] = 0;
 
     // if condition happened:
 (IF_X_GREAT_THAN_ONE) // here is the checking of x
-@i              // i refers to some RAM location
-M=2             // i = 2
+@index_temp
+M=1
+D=M
+@index              // index refers to some RAM location
+M=D+1             // index = 2
 
 // check if i<x
-// if 0<x-i than its ok, if (0>=x-i) its wrong than jump to end LOOP_MAIN
-(IF_i_LESS_THAN_X)
+// if 0<x-index than its ok, if (0>=x-index) its wrong than jump to end LOOP_MAIN
+(IF_index_LESS_THAN_X)
 @R0
 D=M             // D=x
-@i
-D=D-M           // D=x-i
+@index
+D=D-M           // D=x-index
 @LOOP_MAIN
-D;JGT           // if 0<x-i jump to LOOP_MAIN line
+D;JGT           // if 0<x-index jump to LOOP_MAIN line
 @END_MAIN
 0;JMP           // else jump to END_MAIN line
 
 
-(LOOP_MAIN)     // here is the while(i<x) keep going
+(LOOP_MAIN)     // here is the while(index<x) keep going
 
     // create reminder = x temporary variable
 @R0
@@ -48,10 +51,10 @@ M=D             // RAM[reminder] = x
 (WHILE_REMINDER)
 @reminder
 D=M             // D=RAM[reminder]
-@i
-D=D-M           // D=D-RAM[i]
+@index
+D=D-M           // D=D-RAM[index]
 @reminder
-M=D             // RAM[reminder]=RAM[reminder]-RAM[i]
+M=D             // RAM[reminder]=RAM[reminder]-RAM[index]
 @reminder
 D=M             // D=RAM[reminder]
 @WHILE_REMINDER
@@ -62,10 +65,10 @@ D=M             // D=RAM[reminder]
 @NOT_PRIME
 D;JEQ           // if (reminder==0) jump to NOT_PRIME line
         // else:
-@i              
-M=M+1           // i = i + 1
-@IF_i_LESS_THAN_X   
-0;JMP           // go to IF_i_LESS_THAN_X line to check if jump to LOOP_MAIN or END_MAIN
+@index              
+M=M+1           // index = index + 1
+@IF_index_LESS_THAN_X   
+0;JMP           // go to IF_index_LESS_THAN_X line to check if jump to LOOP_MAIN or END_MAIN
 
 (END_MAIN)
 @R1     
